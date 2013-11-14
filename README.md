@@ -1,0 +1,4 @@
+fingerscript
+============
+
+Fingerpring and CoffeeScript
