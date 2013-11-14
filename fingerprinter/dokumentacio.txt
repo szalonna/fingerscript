@@ -1,0 +1,68 @@
+Sebestyén József - U8VZLP
+Ujjlenyomat elemző program
+==========================
+
+
+1. Az alkalmazás szolgáltatásai
+-------------------------------
+* Kép drag'n'drop módszerrel a Dropzone-ba dobva a program egy háttérszálra küldi és megjeleníti
+* A feltöltött képet binarizálja
+* A binarizált képen lehet
+ - erodálni
+ - dilatálni
+ - szkeletonizálni
+* A szkeletonizált képen megkeresi
+ - a vonalvégeket
+ - az elágazásokat
+* A megtalált pontok koordinátáit egy JSON objektumba kigyűjtve kiadja a felhasználónak
+
+
+2. Felhasznált technológiák
+---------------------------
+* HTML5 web worker - háttérszál feldolgozá
+* HTML5 canvas - kép kirajzolása
+* CoffeeScript - Javascript-re forduló nyelv, ebben készült el a központi logika
+* Hit-n-miss szkeletonizálás: a következő két kernel n*90° (n=0,1,2,3) elforgatásainak feleltetem meg a képpontok környezetét:
+
+	0 0 0    0 0     A kernelek 3x3-asok,
+	  1      0 1 1   az üres helyeken egyaránt
+	1 1 1      1 1   lehet 0 vagy 1.
+
+
+3. Minimális gépigény
+---------------------
+* Platformfüggetlen
+* Böngészők minimális verziószáma
+ - Internet Explorer 10.0
+ - Firefox 3.5
+ - Chrome 4.0
+ - Safari 4.0
+ - Opera 10.6
+Ajánlott böngésző: Google Chrome
+FONTOS! A Webkit alapú böngészők (például Google Chrome) nem engednek web workert indítani akkor, ha nem szerveren fut az alkalmazás.
+Alternatív futtatás: https://dl.dropboxusercontent.com/u/3600810/fingerprinter/index.html
+
+
+4. Alkalmazás struktúrája
+-------------------------
+
++- index.html - az alkalmazás kezdőoldala, ezt kell megnyitni a böngészőben
++- style.css - az oldal stílusleírása
++- dokumentacio.txt - ez a fájl
+|
++-+- CoffeeScripts - az eredeti CoffeeScript forrásfájlok
+| |
+| +- build.sh - build szkript
+| +- main.coffee - a főoldalon futó kód
+| |
+| +-+- worker - a web worker kódja
+|   |
+|   +- 01_convolution.coffee - a különböző vizsgáló kernelek találhatóak benne
+|   +- 02_color.coffee - Color osztály
+|   +- 03_bitmap.coffee - Bitmap osztály
+|   +- 04_worker.coffee - a worker kommunikációjáért és alap feladatait ellátó kód
+|
++-+- JS - a CoffeeScript fájlokból generált Javascript fájlok
+  |
+  +- main.js - az oldalon futó kód
+  +- worker.js - a workerben futó kód
